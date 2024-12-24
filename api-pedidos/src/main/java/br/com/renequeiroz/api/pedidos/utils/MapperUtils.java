@@ -1,5 +1,7 @@
 package br.com.renequeiroz.api.pedidos.utils;
 
+import br.com.renequeiroz.api.pedidos.dto.ClienteDTO;
+import br.com.renequeiroz.api.pedidos.entity.Cliente;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.record.RecordModule;
@@ -53,4 +55,19 @@ public class MapperUtils {
 
         return newList;
     }
+
+    public static <T> T converterParaEntidade(Object dto, Class<T> entidadeClass) {
+        if (dto == null) {
+            return null;
+        }
+        return modelMapper.map(dto, entidadeClass);
+    }
+
+    public static ClienteDTO converterClienteParaDTO(Cliente cliente) {
+        if (cliente == null) {
+            return null;
+        }
+        return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getEmail());
+    }
+
 }
