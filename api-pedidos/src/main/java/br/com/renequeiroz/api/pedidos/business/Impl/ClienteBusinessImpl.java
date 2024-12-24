@@ -1,10 +1,12 @@
 package br.com.renequeiroz.api.pedidos.business.Impl;
 
 import br.com.renequeiroz.api.pedidos.business.ClienteBusiness;
+import br.com.renequeiroz.api.pedidos.dto.ClienteDTO;
 import br.com.renequeiroz.api.pedidos.entity.Cliente;
 import br.com.renequeiroz.api.pedidos.exceptions.ClienteNaoEncontradoException;
+import br.com.renequeiroz.api.pedidos.exceptions.ErrorAoSalvarException;
 import br.com.renequeiroz.api.pedidos.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.renequeiroz.api.pedidos.utils.MapperUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +14,11 @@ import java.util.List;
 @Service
 public class ClienteBusinessImpl implements ClienteBusiness {
 
-    @Autowired
-    private ClienteRepository repository;
+    private final ClienteRepository repository;
+
+    public ClienteBusinessImpl(ClienteRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<Cliente> findAll() {
@@ -26,9 +31,13 @@ public class ClienteBusinessImpl implements ClienteBusiness {
     }
 
     @Override
-    public Cliente save(Cliente cliente) {
-
-        return null;
+    public ClienteDTO save(ClienteDTO clienteDTO) throws ErrorAoSalvarException {
+        Cliente cliente = MapperUtils.converterParaEntidade(clienteDTO, Cliente.class);
+        Cliente clienteSalvo = repository.save(cliente);
+        if(clienteSalvo.getId() == null) {
+            throw new ClienteNaoEncontradoException();
+        }
+       return MapperUtils.converterClienteParaDTO(clienteSalvo);
     }
 
     @Override
