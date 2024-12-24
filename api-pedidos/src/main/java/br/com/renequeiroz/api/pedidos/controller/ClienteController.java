@@ -1,13 +1,11 @@
 package br.com.renequeiroz.api.pedidos.controller;
 
 import br.com.renequeiroz.api.pedidos.business.ClienteBusiness;
+import br.com.renequeiroz.api.pedidos.dto.ClienteDTO;
 import br.com.renequeiroz.api.pedidos.entity.Cliente;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cliente")
@@ -26,5 +24,14 @@ public class ClienteController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(cliente);
+    }
+
+    @PostMapping
+    public ResponseEntity<ClienteDTO> save(ClienteDTO clienteDTO) {
+        ClienteDTO c = business.save(clienteDTO);
+        if (c == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(c);
     }
 }
