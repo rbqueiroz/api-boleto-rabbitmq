@@ -20,8 +20,9 @@ public class ItemPedido {
     @Column(name = "quantidade")
     private Integer quantidade;
 
-    public ItemPedido(Produto produto, Integer quantidade) {
+    public ItemPedido(Produto produto, Pedido pedido, Integer quantidade) {
         this.produto = produto;
+        this.pedido = pedido;
         this.quantidade = quantidade;
     }
 
