@@ -2,11 +2,13 @@ package br.com.renequeiroz.api.pedidos.entity;
 
 import br.com.renequeiroz.api.pedidos.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Pedido {
@@ -19,6 +21,7 @@ public class Pedido {
         @JoinColumn(name = "id_cliente")
         private Cliente cliente;
 
+        @JsonManagedReference
         @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
         private List<ItemPedido> itensPedido = new ArrayList<>();
 
@@ -91,5 +94,30 @@ public class Pedido {
 
         public void setDataPedido(LocalDateTime dataPedido) {
                 this.dataPedido = dataPedido;
+        }
+
+        @Override
+        public String toString() {
+                return "Pedido{" +
+                        "id=" + id +
+                        ", cliente=" + cliente +
+                        ", itensPedido=" + itensPedido +
+                        ", valorTotal=" + valorTotal +
+                        ", status=" + status +
+                        ", dataPedido=" + dataPedido +
+                        '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Pedido pedido = (Pedido) o;
+                return Objects.equals(id, pedido.id) && Objects.equals(cliente, pedido.cliente) && Objects.equals(itensPedido, pedido.itensPedido) && Objects.equals(valorTotal, pedido.valorTotal) && status == pedido.status && Objects.equals(dataPedido, pedido.dataPedido);
+        }
+
+        @Override
+        public int hashCode() {
+                return Objects.hash(id, cliente, itensPedido, valorTotal, status, dataPedido);
         }
 }

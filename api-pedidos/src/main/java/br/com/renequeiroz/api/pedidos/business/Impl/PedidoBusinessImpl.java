@@ -7,6 +7,7 @@ import br.com.renequeiroz.api.pedidos.entity.Pedido;
 import br.com.renequeiroz.api.pedidos.exceptions.ErrorAoSalvarException;
 import br.com.renequeiroz.api.pedidos.repository.ItemPedidoRepository;
 import br.com.renequeiroz.api.pedidos.repository.PedidoRepository;
+import br.com.renequeiroz.api.pedidos.services.RabbitMqService;
 import br.com.renequeiroz.api.pedidos.utils.MapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +21,15 @@ public class PedidoBusinessImpl implements PedidoBusiness {
 
     private final Logger logger = LoggerFactory.getLogger(PedidoBusinessImpl.class);
     private final PedidoRepository repository;
-    private final ItemPedidoRepository itemPedidoRepository;
+    private final RabbitMqService rabbitMqService;
 
-    public PedidoBusinessImpl(PedidoRepository repository, ItemPedidoRepository itemPedidoRepository) {
+    public PedidoBusinessImpl(PedidoRepository repository, ItemPedidoRepository itemPedidoRepository, RabbitMqService rabbitMqService) {
         this.repository = repository;
-        this.itemPedidoRepository = itemPedidoRepository;
+        this.rabbitMqService = rabbitMqService;
     }
 
     private Pedido salvarPedido(Pedido pedido){
+        logger.info("Salvando pedido {}", pedido);
         return repository.save(pedido);
     }
 
@@ -39,6 +41,7 @@ public class PedidoBusinessImpl implements PedidoBusiness {
         setItemNoPedido(pedido);
         pedido.setDataPedido(LocalDateTime.now());
         pedido = salvarPedido(pedido);
+        pedido = rabbitMqService.sendMessage(pedido);
         return new PedidoCriadoDTO(pedido.getId(), HttpStatus.CREATED, pedido.getStatus(), MapperUtils.formatarDataDTO(pedido.getDataPedido()));
     }
 
