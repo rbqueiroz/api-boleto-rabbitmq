@@ -7,6 +7,7 @@ import br.com.renequeiroz.api.pedidos.exceptions.ClienteNaoEncontradoException;
 import br.com.renequeiroz.api.pedidos.exceptions.ErrorAoSalvarException;
 import br.com.renequeiroz.api.pedidos.repository.ClienteRepository;
 import br.com.renequeiroz.api.pedidos.utils.MapperUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Service
 public class ClienteBusinessImpl implements ClienteBusiness {
 
+    private final Logger logger = org.slf4j.LoggerFactory.getLogger(ClienteBusinessImpl.class);
     private final ClienteRepository repository;
 
     public ClienteBusinessImpl(ClienteRepository repository) {
@@ -37,11 +39,10 @@ public class ClienteBusinessImpl implements ClienteBusiness {
         if(clienteSalvo.getId() == null) {
             throw new ClienteNaoEncontradoException();
         }
+        logger.info("Cliente salvo com sucesso {}", clienteSalvo.getId());
        return MapperUtils.converterClienteParaDTO(clienteSalvo);
     }
 
     @Override
-    public void delete(Long id) {
-
-    }
+    public void delete(Long id) { }
 }
