@@ -31,6 +31,6 @@ public class PedidoController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.info("Novo pedido feito{}", pedido);
-        return ResponseEntity.ok(pedidoCriadoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoCriadoDTO);
     }
 }
