@@ -1,6 +1,6 @@
 package br.com.renequeiroz.api.pedidos.entity;
 
-import br.com.renequeiroz.api.pedidos.Status;
+import br.com.renequeiroz.api.pedidos.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
