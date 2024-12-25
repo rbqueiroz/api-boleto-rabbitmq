@@ -1,5 +1,6 @@
 package br.com.renequeiroz.api.pedidos.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class ItemPedido {
     @JoinColumn(name = "id_produto")
     private Produto produto;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
