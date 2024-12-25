@@ -1,11 +1,15 @@
 package br.com.renequeiroz.api.pedidos.utils;
 
 import br.com.renequeiroz.api.pedidos.dto.ClienteDTO;
+import br.com.renequeiroz.api.pedidos.dto.ProdutoDTO;
 import br.com.renequeiroz.api.pedidos.entity.Cliente;
+import br.com.renequeiroz.api.pedidos.entity.Produto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.record.RecordModule;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +72,21 @@ public class MapperUtils {
             return null;
         }
         return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getEmail());
+    }
+
+    public static ProdutoDTO converterProdutoParaDTO(Produto produto) {
+        if (produto == null) {
+            return null;
+        }
+        return new ProdutoDTO(produto.getId(), produto.getNome(), produto.getValor());
+    }
+
+    public static String formatarDataDTO(LocalDateTime data) {
+        if (data == null) {
+            return null; // Retorna null se a data for nula
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return data.format(formatter);
     }
 
 }
